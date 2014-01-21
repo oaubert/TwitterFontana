@@ -175,7 +175,7 @@ $ ->
             HTMLFontana()
 
     # Two Demo Fontanas
-    twitterFontana = (settings={}, q="TwitterFontana")->
+    twitterFontana = (settings={}, q="moocnantes")->
         if visualizer
             visualizer.stop()
         datasource = new Fontana.datasources.TwitterSearch(q)
@@ -186,8 +186,7 @@ $ ->
         if visualizer
             visualizer.stop()
         if not settings.transition
-            rand = Math.floor(Math.random() * Fontana.Visualizer.transitionEffects.length)
-            settings.transition = Fontana.Visualizer.transitionEffects[rand]
+            settings.transition = 'scroll-down'
         visualizer = new Fontana.Visualizer(container, HTMLFontana.datasource)
         visualizer.start(settings)
     # Prepare our datasource, the messages will disappear soon...
