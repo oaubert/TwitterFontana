@@ -1,0 +1,99 @@
+!!!
+html
+    head
+        title TwitterFontana admin page
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        meta(name="description", content="With Twitter Fontana you can display Tweets on a big screen or a wall. It's a free & open source and has great customisation options.")
+        meta(property="og:title", content="Twitter Fontana")
+        meta(property="og:description", content="With Twitter Fontana you can display Tweets on a big screen or a wall. It's a free & open source and has great customisation options.")
+        meta(property="og:type", content="website")
+        meta(property="og:url", content="http://twitterfontana.com")
+        meta(property="og:image", content="http://twitterfontana.com/img/avatar.png")
+        meta(property="og:site_name", content="Twitter Fontana")
+        meta(property="fb:admins", content="100000559554412")
+        link.bootstrap(rel="stylesheet", href="/bootstrap/css/bootstrap.min.css")
+        link.bootswatch(rel="stylesheet", href="/css/fontana.css")
+        link(rel="stylesheet", href="/css/transitions.css")
+        link(rel="stylesheet", href="/css/demo.css")
+    body
+        nav.navbar.navbar-default.navbar-fixed-top
+            .navbar-header
+                button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-collapse")
+                    i.icon-bar
+                    i.icon-bar
+                    i.icon-bar
+                h1.icon-fontana-logo.navbar-text
+                .navbar-brand
+                    | Twitter Fontana
+            .collapse.navbar-collapse
+                #controls.navbar-left
+                    button.btn.btn-default.navbar-btn.settings(type="button")
+                        i.icon-cog
+                    | &nbsp;
+                    button.btn.btn-default.navbar-btn.pause-resume(type="button")
+                        i.icon-pause
+                    | &nbsp;
+                    button.btn.btn-default.navbar-btn.fullscreen(type="button")
+                        i.icon-expand
+                .navbar-right
+                    #signin.hidden
+                        button.btn.btn-default.navbar-btn(type="button")
+                            | Sign in with Twitter
+                    #signout.hidden
+                        p.navbar-text(data-text="Hello {screen_name}")
+                        | &nbsp;
+                        button.btn.btn-default.navbar-btn(type="button")
+                            | Sign out
+
+        .fontana
+            - messages = []
+            - messages.push("Welcome to the brand new Twitter Fontana! Completely revamped to work with Twitter's API v1.1. Sign in with your Twitter account to display your own Twitter searches.")
+            - messages.push("There are several transition effects and themes to choose from. Click the cog icon <i class='icon-cog'></i> in the top bar and customise the way Twitter Fontana visualizes Tweets.")
+            - messages.push("A real time fullscreen Twitter wall that uses modern web technology: #js, #html5 & #css3! No Flash! It works in all modern browser and even mobile devices like your iPad.")
+            - messages.push("Completely free & open source. So when you are feeling creative you can create a Twitter wall just the way you like it!")
+            - messages.push("Haven't got the time or powress to DIY, but still want a customized Twitter Wall with your own branding or extra features? Contact us @tweetfontana, we'd love to help!")
+            each message, i in messages
+                div.message.media.well.col-md-6.col-md-offset-3.hidden(id='msg'+i)
+                    figure.pull-left.media-object
+                        img.avatar.img-thumbnail(src="/img/avatar.png", width="64", height="64", alt="")
+                    .media-body
+                        .media-heading
+                            cite
+                                span.name Tweet Fontana
+                                small.text-muted
+                                    span.screen_name @tweetfontana
+                                    span.time.pull-right Just now
+                    .text.lead= message
+
+        .progress.progress-striped.active
+            .progress-bar
+
+        #logos.well.well-sm
+            button.close(type="button") &times;
+            a.icon-eight-logo.text-muted(href="http://www.eight.nl/", title="Twitterfontana was made by Eight Media Internetbureau", target="_blank")
+                span.sr-only Eight Media Internetbureau Arnhem
+            | &nbsp;
+            a.icon-github-logo.text-muted(href="https://github.com/EightMedia/TwitterFontana", title="Fork Twitter Fontana on GitHub", target="_blank")
+                span.sr-only GitHub
+            | &nbsp;
+            a.twitter-share-button(href="https://twitter.com/share", data-url="http://twitterfontana.com", data-text="Clean, fully customizable, Twitter fountain without Flash", data-related="tweetfontana", data-hashtags="twitterfontana")
+                | Tweet
+            | &nbsp;
+            span.facebook
+                iframe(src="//www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Ftwitterfontana&send=false&layout=button_count&width=450&show_faces=false&action=like&colorscheme=light&font=segoe+ui&height=21&appId=202320067644&locale=en_US", scrolling="no", frameborder="0", allowTransparency="true", height=20, width=100)
+
+
+        script(src="/js/lib.js")
+        script(src="/bootstrap/js/bootstrap.min.js")
+        script(src="/js/twitterfontana.js")
+        script(src="/js/demo.js")
+        script.
+            !function(d,s,id){
+                var js,fjs=d.getElementsByTagName(s)[0];
+                if(!d.getElementById(id)){
+                    js=d.createElement(s);
+                    js.id=id;
+                    js.src="//platform.twitter.com/widgets.js";
+                    fjs.parentNode.insertBefore(js,fjs);
+                }
+            }(document,"script","twitter-wjs");

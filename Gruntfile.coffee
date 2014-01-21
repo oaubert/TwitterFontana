@@ -19,7 +19,7 @@ module.exports = (grunt) ->
                     interrupt: true
             js:
                 files: ['frontend/src/js/**/*.js', 'frontend/src/js/**/*.coffee']
-                tasks: ['concat', 'uglify']
+                tasks: ['concat' ]
                 options:
                     interrupt: true
             img:
