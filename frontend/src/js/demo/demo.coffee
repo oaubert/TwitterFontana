@@ -92,7 +92,7 @@ $ ->
             input.change ->
                 q = $("#search", settings).val()
                 if q && q != visualizer.datasource.q
-                    twitterFontana(transition: $("#transition", settings).val(),
+                    twitterFontana(transition: "scroll-down",
                                    $("#search", settings).val())
         else
             input.attr("disabled", true)
@@ -159,10 +159,11 @@ $ ->
         signOut.removeClass("hidden")
         if settings
             rigSearchBox(settings)
-            twitterFontana(transition: $("#transition", settings).val(),
+            twitterFontana(transition: "scroll-down",
                            $("#search", settings).val())
         else
-            twitterFontana()
+            twitterFontana(transition: "scroll-down",
+                           'mooc')
 
     isSignedOut = ->
         $(document.body).removeClass('signedIn')
@@ -170,7 +171,7 @@ $ ->
         signOut.addClass("hidden")
         if settings
             rigSearchBox(settings)
-            HTMLFontana(transition: $("#transition", settings).val())
+            HTMLFontana(transition: "scroll-down")
         else
             HTMLFontana()
 
