@@ -124,4 +124,9 @@ html, body {
     .navbar-brand {
         padding-left: 3em;
     }
+
+}
+
+.navbar-default .navbar-collapse {
+    display: none !important;
 }
