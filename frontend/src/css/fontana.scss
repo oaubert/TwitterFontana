@@ -1,6 +1,12 @@
 body {
     background-color: #1872C0;
 }
+.navbar-default .navbar-collapse {
+    display: none !important;
+}
+#logos {
+    display: none;
+}
 
 .navbar-default {
     background-color: #166AB2;
