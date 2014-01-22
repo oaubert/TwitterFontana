@@ -57,7 +57,6 @@ $ ->
     controls = $("#controls")
     signIn = $("#signin")
     signOut = $("#signout")
-    auth = new Fontana.TwitterAuth()
     container = $(".fontana")
     visualizer = null
     settings = null
@@ -143,37 +142,6 @@ $ ->
         else
             Fontana.utils.requestFullScreen(document.body)
 
-    # Auth
-    checkSession = ->
-        auth.activeSession (data)->
-            if (data)
-                isSignedIn(data)
-            else
-                isSignedOut()
-
-    isSignedIn = (data)->
-        $(document.body).addClass('signedIn')
-        userText = $(".navbar-text", signOut)
-        userText.html(nano(userText.data("text"), data))
-        signIn.addClass("hidden")
-        signOut.removeClass("hidden")
-        if settings
-            rigSearchBox(settings)
-            twitterFontana(transition: $("#transition", settings).val(),
-                           $("#search", settings).val())
-        else
-            twitterFontana()
-
-    isSignedOut = ->
-        $(document.body).removeClass('signedIn')
-        signIn.removeClass("hidden")
-        signOut.addClass("hidden")
-        if settings
-            rigSearchBox(settings)
-            HTMLFontana(transition: $("#transition", settings).val())
-        else
-            HTMLFontana()
-
     # Two Demo Fontanas
     twitterFontana = (settings={}, q="TwitterFontana")->
         if visualizer
@@ -202,4 +170,4 @@ $ ->
     $("button", signOut).click -> auth.signOut(checkSession)
     $("#logos .close").click -> $(this).parent().remove()
 
-    checkSession()
+    twitterFontana(transition: "scroll-down", 'default')
