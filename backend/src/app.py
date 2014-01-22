@@ -183,9 +183,11 @@ def devserver(extra_conf=None):
     })
     # Setup a index.html redirect for convenience sake.
     app.route('/')(lambda: flask.redirect('index.html'))
-    # Run the development server
-    app.run()
-
+    # Run the development or production server
+    if app.config.get('PROD'):
+        app.run(debug=False, host='0.0.0.0')
+    else:
+        app.run()
 
 if __name__ == "__main__":
     # This will get invoked when you run `python backend/src/fontana.py`
