@@ -137,6 +137,17 @@ $ ->
         visualizer = new Fontana.Visualizer(container, datasource)
         visualizer.start(settings)
 
+    # Automatically refresh /all db. If the admin page is not
+    # displayed, the /moderated stream will not refresh.
+    fetchMessages = ->
+        refresh()
+        scheduleFetchMessages()
+
+    scheduleFetchMessages = ->
+        fetchMessagesTimer = setTimeout((=> fetchMessages()), 60000)
+
+    refresh()
+
     HTMLFontana = (settings={})->
         if visualizer
             visualizer.stop()
@@ -147,6 +158,7 @@ $ ->
     # Prepare our datasource, the messages will disappear soon...
     HTMLFontana.datasource = new Fontana.datasources.HTML(container)
     HTMLFontana.datasource.getMessages()
+    scheduleFetchMessages()
 
     # Bindings
     $(".settings", controls).click -> toggleSettings.call(this)
