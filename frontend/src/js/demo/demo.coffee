@@ -178,7 +178,7 @@ $ ->
     twitterFontana = (settings={}, q="TwitterFontana")->
         if visualizer
             visualizer.stop()
-        datasource = new Fontana.datasources.TwitterSearch(q)
+        datasource = new Fontana.datasources.ProxyTwitterSearch(q, '/moderated')
         visualizer = new Fontana.Visualizer(container, datasource)
         visualizer.start(settings)
 
