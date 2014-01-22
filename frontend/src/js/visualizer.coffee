@@ -4,7 +4,7 @@
 
 @Fontana ?= {}
 
-messageTemplate = '<div id="{id}" class="message media well col-md-6 col-md-offset-3">
+messageTemplate = '<div id="{id_str}" class="message media well col-md-6 col-md-offset-3 {excludeClass}">
     <figure class="pull-left media-object">
         <img src="{user.profile_image_url}" width="64" height="64" alt="" class="avatar img-thumbnail">
     </figure>
@@ -18,6 +18,9 @@ messageTemplate = '<div id="{id}" class="message media well col-md-6 col-md-offs
                 </small>
             </cite>
         </div>
+    <div class="action">
+    <a href="/exclude/{id_str}">Exclude</a>
+    </div>
         <div class="text lead"><q>{text}</q></div>
     </div>
 </div>'
@@ -72,12 +75,16 @@ class Fontana.Visualizer
 
     renderMessages: (messages, initial=false)->
         messages.reverse().forEach((message)=>
-            if !$("##{message.id}").length
+            if !$("##{message.id_str}").length
                 if message.entities
                     message.text = twttr.txt.autoLinkWithJSON(
                         message.text, message.entities, targetBlank: true)
                 else
                     message.text = twttr.txt.autoLink(message.text, targetBlank: true)
+                if message.exclude
+                    message.excludeClass = 'exclude'
+                else
+                    message.excludeClass = ''
                 messageNode = $(nano(messageTemplate, message))
                 @updateTime(messageNode)
                 @container.prepend(messageNode))
