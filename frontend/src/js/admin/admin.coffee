@@ -116,7 +116,7 @@ $ ->
                            $("#search", settings).val())
         else
             twitterFontana(transition: "scroll-down",
-                           'mooc')
+                           'moocnantes')
 
     isSignedOut = ->
         $(document.body).removeClass('signedIn')
@@ -129,7 +129,7 @@ $ ->
             HTMLFontana()
 
     # Two Demo Fontanas
-    twitterFontana = (settings={}, q="mooc")->
+    twitterFontana = (settings={}, q="moocnantes")->
         if visualizer
             visualizer.stop()
         datasource = new Fontana.datasources.ProxyTwitterSearch(q, '/all')
