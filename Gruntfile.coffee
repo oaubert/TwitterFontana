@@ -37,6 +37,9 @@ module.exports = (grunt) ->
                     'frontend/httpdocs/index.html': [
                         'frontend/src/index.jade'
                     ],
+                    'frontend/httpdocs/admin.html': [
+                        'frontend/src/admin.jade'
+                    ],
                     'frontend/httpdocs/fountain.html': [
                         'frontend/src/fountain.jade'
                     ],
@@ -64,6 +67,9 @@ module.exports = (grunt) ->
                     ]
                     'frontend/httpdocs/js/demo.js': [
                         'frontend/src/js/demo/*.coffee'
+                    ]
+                    'frontend/httpdocs/js/admin.js': [
+                        'frontend/src/js/admin/*.coffee'
                     ]
 
         # uglify
