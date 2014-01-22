@@ -1,11 +1,25 @@
 import flask
 import json
+import bson
 import os
+from flask import request, redirect
 import sys
 from fontana import twitter
+import pymongo
+
+DB   	  = 'fontana'
+connection = pymongo.Connection("localhost", 27017)
+db = connection[DB]
+latest_headers = {}
+
+class MongoEncoder(json.JSONEncoder):
+    def default(self, obj, **kwargs):
+        if isinstance(obj, bson.ObjectId):
+            return str(obj)
+        else:
+            return json.JSONEncoder.default(obj, **kwargs)
 
 app = flask.Flask('fontana')
-
 
 def twitter_authorisation_begin():
     """
@@ -82,8 +96,57 @@ def twitter_search():
         'oauth_token': flask.session['twitter_oauth_token'],
         'oauth_token_secret': flask.session['twitter_oauth_token_secret']
     }
-    return twitter.search(app.config, token, flask.request.args)
+    # Find out last id
+    last = db['tweets'].aggregate( { '$group': { '_id':"", 'last': { '$max': "$id" } } } )
+    since_id = long(flask.request.args.get('since_id'))
+    params = dict(flask.request.args)
+    if last.get("ok") == 1 and last['result']:
+        last = long(last['result'][0]['last'])
+        params['since_id'] = max(last, since_id)
+    # Query twitter and cache result into DB
+    (text, status_code, headers) = twitter.search(app.config, token, params)
+    data = json.loads(text)
+    for s in data['statuses']:
+        s['exclude'] = False
+        # Use tweet id as _id so that save will replace existing tweets if necessary
+        s['_id'] = s['id']
+        db['tweets'].save(s)
+    latest_headers = dict(headers)
+    return (text, status_code, headers)
 
+@app.route('/moderated')
+def twitter_moderated():
+    """
+    Return moderated posts
+    """
+    # Return tweets > since_id
+    since_id = long(request.values.get('since_id', 0))
+    return (json.dumps({ 'statuses': [ s for s in db['tweets'].find({ 'exclude': False,
+                                                                      'id': { '$gt': since_id } }).sort([('id', -1)]) ]},
+                       indent=None if request.is_xhr else 2,
+                       cls=MongoEncoder),
+            200,
+            latest_headers)
+
+@app.route('/all')
+def twitter_all():
+    """
+    Return all cached posts
+    """
+    since_id = long(request.values.get('since_id', 0))
+    return (json.dumps({ 'statuses': [ s for s in db['tweets'].find({ 'id': { '$gt': since_id } }).sort([ ('id', -1) ]) ]},
+                       indent=None if request.is_xhr else 2,
+                       cls=MongoEncoder),
+            200,
+            latest_headers)
+
+@app.route('/exclude/<path:ident>')
+def exclude(ident):
+    """Exclude given post.
+    """
+    db['tweets'].update( { 'id_str': ident },
+                         { '$set': { 'exclude': True } })
+    return redirect('/admin.html')
 
 @app.route('/api/session/clear/', methods=['POST'])
 def signout():
