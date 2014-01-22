@@ -156,3 +156,63 @@ class @Fontana.datasources.TwitterSearch
                         ])
                 )
 
+class @Fontana.datasources.ProxyTwitterSearch
+    ###
+    This datasource performs a search using the Proxy API and provides
+    the callback with the results. Repeated calls to getMessages will
+    expand the list of messages with new search results.
+
+    Because of API limits the minimum time between actual searches
+    is 5 seconds (180 searches in a 15 minute).
+    ###
+    min_interval = 60000 * 15 / 180
+
+    constructor: (@q, url) ->
+        @params = {
+            since_id: 1
+            q: @q
+            result_type: 'recent'
+        }
+        @url = url
+        @lastCall = 0
+        @messages = []
+
+    getMessages: (callback)->
+        now = (new Date()).getTime()
+        if now - @lastCall < min_interval
+            if callback
+                setTimeout((=> callback(@messages)), 0)
+        else
+            @lastCall = (new Date()).getTime()
+            $.getJSON(@url, @params)
+                .success((data)=>
+                    if data.statuses.length
+                        @messages = data.statuses.concat(@messages)
+                        @params['since_id'] = @messages[0].id_str
+                    if callback
+                        if @messages.length
+                            callback(@messages)
+                        else
+                            callback([
+                                id: (new Date()).getTime()
+                                created_at: new Date().toString()
+                                text: 'Your search term returned no Tweets :('
+                                user:
+                                    name: 'Twitter Fontana'
+                                    screen_name: 'twitterfontana'
+                                    profile_image_url: '/img/avatar.png'
+                            ])
+                )
+                .error(->
+                    if callback
+                        callback([
+                            id: (new Date()).getTime()
+                            created_at: new Date().toString()
+                            text: 'Error fetching tweets :('
+                            user:
+                                name: 'Twitter Fontana'
+                                screen_name: 'twitterfontana'
+                                profile_image_url: '/img/avatar.png'
+                        ])
+                )
+
