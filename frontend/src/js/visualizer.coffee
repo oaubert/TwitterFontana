@@ -4,7 +4,7 @@
 
 @Fontana ?= {}
 
-messageTemplate = '<div id="{id_str}" class="message media well col-md-6 col-md-offset-3 {excludeClass}">
+messageTemplate = '<div id="{id_str}" class="message media well col-md-6 col-md-offset-3 {classes} {excludeClass}">
     <figure class="pull-left media-object">
         <img src="{user.profile_image_url}" width="64" height="64" alt="" class="avatar img-thumbnail">
     </figure>
