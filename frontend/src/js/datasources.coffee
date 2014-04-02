@@ -187,7 +187,7 @@ class @Fontana.datasources.ProxyTwitterSearch
             $.getJSON(@url, @params)
                 .success((data)=>
                     if data.statuses.length
-                        @messages = data.statuses.concat(@messages)
+                        @messages = data.statuses
                         @params['since_id'] = @messages[0].id_str
                     if callback
                         if @messages.length
