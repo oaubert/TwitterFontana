@@ -94,7 +94,8 @@ $ ->
             visualizer.pause()
 
     refresh = ->
-        refreshsource.getMessages()
+        if (refreshsource)
+            refreshsource.getMessages()
 
     # Auth
     checkSession = ->
