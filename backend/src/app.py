@@ -125,9 +125,8 @@ def twitter_moderated():
     Return moderated posts
     """
     # Return tweets > since_id
-    since_id = long(request.values.get('since_id', 0))
-    return (json.dumps({ 'statuses': [ s for s in db['tweets'].find({ 'exclude': False,
-                                                                      'id': { '$gt': since_id } }).sort([('id', -1)]) ]},
+    #since_id = long(request.values.get('since_id', 0))
+    return (json.dumps({ 'statuses': [ s for s in db['tweets'].find({ 'exclude': False }).sort([('id', -1)]).limit(40) ]},
                        indent=None if request.is_xhr else 2,
                        cls=MongoEncoder),
             200,
