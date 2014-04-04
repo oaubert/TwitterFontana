@@ -107,7 +107,12 @@ def twitter_search():
     (text, status_code, headers) = twitter.search(app.config, token, params)
     data = json.loads(text)
     for s in data['statuses']:
-        s['exclude'] = False
+        s['exclude'] = s['text'].startswith('RT ')
+        s['classes'] = []
+        if s['text'].startswith('RT '):
+            s['classes'].append('RT')
+        if '?' in s['text']:
+            s['classes'].append('question')
         # Use tweet id as _id so that save will replace existing tweets if necessary
         s['_id'] = s['id']
         db['tweets'].save(s)
