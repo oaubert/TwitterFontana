@@ -79,3 +79,8 @@ Here are some further development ideas:
 
 - During my actual usage, I hardcoded the query terms so that I do not
   depend on the correct setting in the admin panel.
+
+- Little advice: you may want to setup a new/blank twitter account to
+  run the admin interface, so that your twitter stream is not
+  encumbered with direct tweets or private conversations between 2
+  people you are following.
