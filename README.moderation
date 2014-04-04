@@ -1,5 +1,10 @@
 # Moderation support
 
+## Requirements
+
+You should install a mongo database, that will be used to store the
+cached tweets.
+
 ## Principle
 
 Moderation support has been hacked in. The principle is to have the
