@@ -7,6 +7,7 @@
     "license":"MIT",
     "dependencies":{
         "grunt":"0.4",
+        "grunt-cli":"*",
         "grunt-contrib-jade":"0.8",
         "grunt-contrib-compass":"0.5",
         "grunt-contrib-uglify":"0.2",
