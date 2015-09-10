@@ -124,13 +124,11 @@ def twitter_moderated():
     """
     Return moderated posts
     """
-    # Return tweets > since_id
-    #since_id = long(request.values.get('since_id', 0))
     return (json.dumps({ 'statuses': [ s for s in db['tweets'].find({ 'exclude': False }).sort([('id', -1)]).limit(40) ]},
                        indent=None if request.is_xhr else 2,
                        cls=MongoEncoder),
             200,
-            latest_headers)
+            {'content-type': 'application/json'})
 
 @app.route('/all')
 def twitter_all():
