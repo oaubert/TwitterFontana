@@ -151,6 +151,14 @@ def exclude(ident):
                          { '$set': { 'exclude': True } })
     return redirect('/admin.html')
 
+@app.route('/include/<path:ident>')
+def include(ident):
+    """Include given post.
+    """
+    db['tweets'].update( { 'id_str': ident },
+                         { '$set': { 'exclude': False } })
+    return redirect('/admin.html')
+
 @app.route('/api/session/clear/', methods=['POST'])
 def signout():
     """

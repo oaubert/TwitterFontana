@@ -19,7 +19,8 @@ messageTemplate = '<div id="{id_str}" class="message media well col-md-6 col-md-
             </cite>
         </div>
     <div class="action">
-    <a href="/exclude/{id_str}">Exclude</a>
+    <a href="/exclude/{id_str}">Exclude</a> | <a href="/include/{id_str}">Include</a>
+
     </div>
         <div class="text lead"><q>{text}</q></div>
     </div>
