@@ -7,6 +7,7 @@ import sys
 from fontana import twitter
 import pymongo
 
+DEFAULT_PORT = 2014
 DB   	  = 'fontana'
 connection = pymongo.Connection("localhost", 27017)
 db = connection[DB]
@@ -163,7 +164,7 @@ def absolute_url(name):
     """
     Flask's url_for with added SERVER_NAME
     """
-    host = app.config['SERVER_NAME'] or 'localhost:5000'
+    host = app.config['SERVER_NAME'] or ('localhost:' + str(DEFAULT_PORT))
     url = flask.url_for(name)
     return 'http://%s%s' % (host, url)
 
@@ -187,7 +188,7 @@ def devserver(extra_conf=None):
     app.route('/')(lambda: flask.redirect('index.html'))
     # Run the development or production server
     if app.config.get('PROD'):
-        app.run(debug=False, host='0.0.0.0')
+        app.run(debug=False, host='0.0.0.0', port=DEFAULT_PORT)
     else:
         app.run()
 
