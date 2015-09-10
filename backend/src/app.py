@@ -12,6 +12,7 @@ DB   	  = 'fontana'
 connection = pymongo.Connection("localhost", 27017)
 db = connection[DB]
 latest_headers = {}
+MODERATED_SIZE = 40
 
 class MongoEncoder(json.JSONEncoder):
     def default(self, obj, **kwargs):
@@ -91,6 +92,7 @@ def twitter_search():
     """
     Perform a Twitter search
     """
+    global latest_headers
     if not flask.session.get('twitter_user_id'):
         return flask.abort(403, 'no active session')
     token = {
@@ -125,7 +127,7 @@ def twitter_moderated():
     """
     Return moderated posts
     """
-    return (json.dumps({ 'statuses': [ s for s in db['tweets'].find({ 'exclude': False }).sort([('id', -1)]).limit(40) ]},
+    return (json.dumps({ 'statuses': [ s for s in db['tweets'].find({ 'exclude': False }).sort([('id', -1)]).limit(MODERATED_SIZE) ]},
                        indent=None if request.is_xhr else 2,
                        cls=MongoEncoder),
             200,
@@ -149,6 +151,15 @@ def exclude(ident):
     """
     db['tweets'].update( { 'id_str': ident },
                          { '$set': { 'exclude': True } })
+    return redirect('/admin.html')
+
+@app.route('/set_moderated/<int:length>')
+def set_moderated_length(length):
+    """Set moderated queue length
+    """
+    global MODERATED_SIZE
+    if length > 2 and length < 100:
+        MODERATED_SIZE = length
     return redirect('/admin.html')
 
 @app.route('/include/<path:ident>')
