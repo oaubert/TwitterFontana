@@ -1,0 +1,86 @@
+# Moderation support
+
+## Requirements
+
+You should install a mongo database, that will be used to store the
+cached tweets.
+
+## Principle
+
+Moderation support has been hacked in. The principle is to have the
+admin page do the actual Twitter query (through the server), have the
+results cached at the server level in a Mongo DB and then returned to
+the admin page for display and moderation.
+
+The client page (index.jade) uses a ProxyTwitterSearch datasource,
+that fetches its data (ignoring query settings) from
+http://localhost:5000/moderated
+This URL gets data from the cached results from the Mongo DB.
+
+Additional information is added to the cached tweets: 'exclude' and
+'classes' properties.
+
+The 'exclude' boolean property indicates if the tweets should be
+excluded. Such tweets will not be returned in the /moderated stream.
+
+The 'classes' list adds a list of custom classes to each tweet. This
+provides the opportunity to categorize tweets (for instance,
+highlighting questions).
+
+Note: The admin page is in charge of updating the cached tweets
+(through the regular /all query). This means that if noone accesses
+the admin page, the cached feed will not update (which is in fact a
+good property, since we want to make sure that we appropriately
+moderate the tweetwall).
+
+## Usage
+
+After having setup the application as described in README.md, use
+http://localhost:5000/admin.html to access the admin panel. After
+signing in and setting the search term, it will fetch tweets from
+Twitter and cache them in the mongo db.
+
+In another window, access http://localhost:5000/index.html to get a
+visualization of moderated tweets only.
+
+## Ideas and TODOs
+
+Here are some further development ideas:
+
+- The number of tweets returned in the /moderated stream is hardcoded
+  to 40. In fact, while using it, I kept modifying this value (on the
+  server) depending on the Twitter activity, so that the tweetwall
+  always displays relevant tweets. This hardcoded value should be made
+  a setting, controller by the admin interface.
+
+- The "classes" addition could be used to tag some tweets as "general"
+  or "important", and use these to fill holes with relevant tweets
+  when the actual twitter stream is not active enough.
+
+- More generally, there should be some tagging interface added to the
+  admin panel (to categorize questions, important tweets, etc).
+
+- It would be nice to implement some websocket based control of the
+  client interface, so that the admin interface can force refresh on
+  the client for instance.
+
+- Some "panel" display could be added: have the possibility to
+  intermingle information panels (next session, etc) in the tweets
+  display.
+
+- The current handling of retweets is (in the server code) to
+  automatically mark RTs as excluded, so that we do not bother the
+  audience with RTs. However, RTs are an indication of popularity and
+  it would be nice to present this information. What could be done
+  (server-side) would be to tracks RTs, and mark the original tweet
+  with additional classes like "rising" (between 1 and 5 RTs),
+  "popular" (between 6 and 15 RTs), etc. This would allow some custom
+  display of popular tweets.
+
+- During my actual usage, I hardcoded the query terms so that I do not
+  depend on the correct setting in the admin panel.
+
+- Little advice: you may want to setup a new/blank twitter account to
+  run the admin interface, so that your twitter stream is not
+  encumbered with direct tweets or private conversations between 2
+  people you are following.

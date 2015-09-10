@@ -170,3 +170,4 @@ $ ->
     $("#logos .close").click -> $(this).parent().remove()
 
     twitterFontana(transition: "scroll-down", 'moocnantes')
+
